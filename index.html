@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Command Center | Dashboard Interativo de Fórmula 1</title>
+    <meta name="description"
+        content="Dashboard profissional de Fórmula 1 com dados em tempo real, classificações, análises preditivas e calendário completo da temporada.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=4">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Racing Line Animation -->
+    <svg class="racing-line-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+        <path class="racing-line" d="M0,540 Q480,200 960,540 T1920,540" />
+    </svg>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <path d="M8 12 L24 4 L40 12 L40 36 L24 44 L8 36Z" stroke="url(#logoGrad)" stroke-width="2"
+                            fill="none" />
+                        <path d="M14 20 L24 14 L34 20 L34 32 L24 38 L14 32Z" fill="url(#logoGrad)" opacity="0.3" />
+                        <path d="M20 26 L24 23 L28 26 L28 30 L24 33 L20 30Z" fill="url(#logoGrad)" />
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e10600" />
+                                <stop offset="100%" style="stop-color:#ff6b35" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>F1 <span class="accent">COMMAND</span> CENTER</h1>
+                    <p class="logo-subtitle">INTELLIGENCE DASHBOARD</p>
+                </div>
+            </div>
+            <nav class="header-nav">
+                <button class="nav-btn active" data-section="overview" id="nav-overview">
+                    <span class="nav-icon">📊</span> Overview
+                </button>
+                <button class="nav-btn" data-section="standings" id="nav-standings">
+                    <span class="nav-icon">🏆</span> Standings
+                </button>
+                <button class="nav-btn" data-section="calendar" id="nav-calendar">
+                    <span class="nav-icon">📅</span> Calendar
+                </button>
+                <button class="nav-btn" data-section="predictions" id="nav-predictions">
+                    <span class="nav-icon">🔮</span> Predictions
+                </button>
+                <button class="nav-btn" data-section="analytics" id="nav-analytics">
+                    <span class="nav-icon">📈</span> Analytics
+                </button>
+                <button class="nav-btn" data-section="strategy" id="nav-strategy">
+                    <span class="nav-icon">🧪</span> Strategy Lab
+                </button>
+                <button class="nav-btn" data-section="bet" id="nav-bet">
+                    <span class="nav-icon">🎯</span> Bet Edge
+                </button>
+            </nav>
+            <div class="header-status">
+                <div class="live-indicator" id="liveIndicator">
+                    <span class="live-dot"></span>
+                    <span>LIVE DATA</span>
+                </div>
+                <div class="season-badge" id="seasonBadge">SEASON</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ========== OVERVIEW SECTION ========== -->
+        <section class="section active" id="section-overview">
+
+            <!-- Hero Stats Strip -->
+            <div class="hero-stats-strip">
+                <div class="hero-stat" id="heroStat1">
+                    <div class="hero-stat-value" data-count="24">0</div>
+                    <div class="hero-stat-label">RACES</div>
+                    <div class="hero-stat-sublabel" id="seasonLabel">Season</div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat" id="heroStat2">
+                    <div class="hero-stat-value" data-count="20">0</div>
+                    <div class="hero-stat-label">DRIVERS</div>
+                    <div class="hero-stat-sublabel">Active Grid</div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat" id="heroStat3">
+                    <div class="hero-stat-value" data-count="10">0</div>
+                    <div class="hero-stat-label">TEAMS</div>
+                    <div class="hero-stat-sublabel">Constructors</div>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat" id="heroStat4">
+                    <div class="hero-stat-value" data-count="6">0</div>
+                    <div class="hero-stat-label">SPRINTS</div>
+                    <div class="hero-stat-sublabel">This Season</div>
+                </div>
+            </div>
+
+            <!-- Championship Battle Card -->
+            <div class="grid-2col">
+                <div class="card championship-battle-card" id="championshipBattle">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">⚔️</span>
+                            Championship Battle
+                        </h2>
+                        <span class="card-badge live-badge">LIVE</span>
+                    </div>
+                    <div class="battle-container" id="battleContainer">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Last Race Results -->
+                <div class="card last-race-card" id="lastRaceCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">🏁</span>
+                            Last Race Result
+                        </h2>
+                        <span class="card-badge">R24</span>
+                    </div>
+                    <div class="last-race-info" id="lastRaceInfo">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pit Stop Analysis Card (NEW) -->
+            <div class="card pit-stop-card" id="pitStopCard">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">⏱️</span> Pit Stop Analysis</h2>
+                    <span class="card-badge">LAST RACE</span>
+                </div>
+                <div id="pitStopContent"><!-- Filled by JS --></div>
+            </div>
+
+            <!-- Sprint Race Results (NEW) -->
+            <div class="card sprint-card" id="sprintCard" style="display:none;">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">⚡</span> Sprint Race</h2>
+                    <span class="card-badge"
+                        style="background:rgba(255,140,0,0.2);color:#ff8c00;border-color:rgba(255,140,0,0.4);">SPRINT</span>
+                </div>
+                <div id="sprintContent"><!-- Filled by JS --></div>
+            </div>
+
+            <!-- Top 5 Drivers Quick View -->
+            <div class="card top-drivers-card" id="topDriversCard">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="title-icon">👑</span>
+                        Top 5 Driver Championship
+                    </h2>
+                </div>
+                <div class="top-drivers-grid" id="topDriversGrid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Constructor Standings Bar Chart + Next Race -->
+            <div class="grid-2col">
+                <div class="card" id="constructorChartCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">🏗️</span>
+                            Constructor Points
+                        </h2>
+                    </div>
+                    <div class="constructor-bars" id="constructorBars">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div class="card next-race-card" id="nextRaceCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">🗓️</span>
+                            Season Progress
+                        </h2>
+                    </div>
+                    <div class="next-race-content" id="nextRaceContent">
+                        <!-- Filled by JS -->
+                    </div>
+                    <!-- Circuit Records badge (NEW) -->
+                    <div id="circuitRecordsContent" style="margin-top:12px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== STANDINGS SECTION ========== -->
+        <section class="section" id="section-standings">
+            <div class="section-header-bar">
+                <h2 class="section-main-title">🏆 Championship Standings</h2>
+                <div class="toggle-group" id="standingsToggle">
+                    <button class="toggle-btn active" data-tab="drivers">Drivers</button>
+                    <button class="toggle-btn" data-tab="constructors">Constructors</button>
+                </div>
+            </div>
+
+            <div class="standings-panel active" id="driversPanel">
+                <div class="standings-table-wrapper">
+                    <table class="standings-table" id="driversTable">
+                        <thead>
+                            <tr>
+                                <th>POS</th>
+                                <th>DRIVER</th>
+                                <th>TEAM</th>
+                                <th>POINTS</th>
+                                <th>WINS</th>
+                                <th>PROGRESS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="driversTableBody">
+                            <!-- Filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="standings-panel" id="constructorsPanel">
+                <div class="standings-table-wrapper">
+                    <table class="standings-table" id="constructorsTable">
+                        <thead>
+                            <tr>
+                                <th>POS</th>
+                                <th>CONSTRUCTOR</th>
+                                <th>NATIONALITY</th>
+                                <th>POINTS</th>
+                                <th>WINS</th>
+                                <th>PROGRESS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="constructorsTableBody">
+                            <!-- Filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CALENDAR SECTION ========== -->
+        <section class="section" id="section-calendar">
+            <div class="section-header-bar">
+                <h2 class="section-main-title" id="calendarTitle">📅 Race Calendar</h2>
+                <div class="calendar-legend">
+                    <span class="legend-item"><span class="legend-dot completed"></span> Completed</span>
+                    <span class="legend-item"><span class="legend-dot upcoming"></span> Upcoming</span>
+                    <span class="legend-item"><span class="legend-dot sprint"></span> Sprint Weekend</span>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Filled by JS -->
+            </div>
+        </section>
+
+        <!-- ========== PREDICTIONS SECTION ========== -->
+        <section class="section" id="section-predictions">
+            <div class="section-header-bar">
+                <h2 class="section-main-title">🔮 AI Predictions & Analysis</h2>
+                <span class="ai-badge">Powered by Statistical Analysis</span>
+            </div>
+
+            <div class="predictions-grid">
+                <!-- Championship Prediction -->
+                <div class="card prediction-card" id="champPrediction">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">🏆</span>
+                            2026 Championship Prediction
+                        </h2>
+                        <span class="card-badge prediction-badge">AI FORECAST</span>
+                    </div>
+                    <div class="prediction-content" id="champPredictionContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Team Performance Trends -->
+                <div class="card prediction-card" id="teamTrends">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">📊</span>
+                            Team Form Analysis
+                        </h2>
+                        <span class="card-badge prediction-badge">TRENDS</span>
+                    </div>
+                    <div class="team-trends-content" id="teamTrendsContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Head to Head -->
+                <div class="card prediction-card" id="h2hCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">⚡</span>
+                            Teammate Battles
+                        </h2>
+                    </div>
+                    <div class="h2h-content" id="h2hContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Key Insights -->
+                <div class="card prediction-card" id="insightsCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">💡</span>
+                            Key Insights
+                        </h2>
+                    </div>
+                    <div class="insights-content" id="insightsContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== ANALYTICS SECTION ========== -->
+        <section class="section" id="section-analytics">
+            <div class="section-header-bar">
+                <h2 class="section-main-title">📈 Deep Analytics</h2>
+            </div>
+
+            <!-- Weather Card + Qualifying Gap side by side (NEW) -->
+            <div class="grid-2col" style="margin-bottom:24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🌤️</span> Race Day Weather</h2>
+                        <span class="card-badge prediction-badge">OPENF1</span>
+                    </div>
+                    <div id="weatherContent"><!-- Filled by JS --></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">⏱️</span> Qualifying Gap to Pole</h2>
+                        <span class="card-badge">Q3</span>
+                    </div>
+                    <div id="qualiGapContent"><!-- Filled by JS --></div>
+                </div>
+            </div>
+
+            <!-- Sector Times + Top Speed row (NEW) -->
+            <div class="grid-2col" style="margin-bottom:24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🟣</span> Sector Times Breakdown</h2>
+                        <span class="card-badge prediction-badge">OPENF1</span>
+                    </div>
+                    <div id="sectorTimesContent"><!-- Filled by JS --></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">💨</span> Top Speed Rankings</h2>
+                        <span class="card-badge">SPEED TRAP</span>
+                    </div>
+                    <div id="topSpeedContent"><!-- Filled by JS --></div>
+                </div>
+            </div>
+
+            <!-- Tyre Degradation (NEW) -->
+            <div class="card" style="margin-bottom:24px;" id="tyreDegCard">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">📉</span> Tyre Degradation Model</h2>
+                    <span class="card-badge prediction-badge">OPENF1</span>
+                </div>
+                <div id="tyreDegContent"><!-- Filled by JS --></div>
+            </div>
+
+            <!-- Driver Nationality Grid (NEW) -->
+            <div class="card" style="margin-bottom:24px;" id="nationalityCard">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">🌍</span> Grid Nationalities</h2>
+                    <span class="card-badge">20 DRIVERS</span>
+                </div>
+                <div id="nationalityContent"><!-- Filled by JS --></div>
+            </div>
+
+            <!-- Championship Points Timeline -->
+            <div class="card" id="pointsTimelineCard" style="margin-bottom:24px;">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">📊</span> Championship Points Timeline</h2>
+                    <span class="card-badge live-badge">SEASON STORY</span>
+                </div>
+                <div id="pointsTimelineContent">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Tyre Strategy Visualizer (NEW) -->
+            <div class="card" id="tyreStrategyCard" style="margin-bottom:24px;">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">🛞</span> Tyre Strategy — Last Race</h2>
+                    <span class="card-badge prediction-badge">OPENF1</span>
+                </div>
+                <div id="tyreStrategyContent">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+
+            <!-- Lap Time Evolution + Race Control in 2 col -->
+            <div class="grid-2col" style="margin-bottom:24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">📈</span> Lap Time Evolution</h2>
+                        <span class="card-badge">TOP 5</span>
+                    </div>
+                    <div id="lapTimeContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🚩</span> Race Control Timeline</h2>
+                        <span class="card-badge">EVENTS</span>
+                    </div>
+                    <div id="raceControlContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <!-- Points Distribution -->
+                <div class="card analytics-card" id="pointsDistCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">🎯</span>
+                            Points Distribution
+                        </h2>
+                    </div>
+                    <div class="points-dist-content" id="pointsDistContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Win Distribution -->
+                <div class="card analytics-card" id="winDistCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">🥇</span>
+                            Win Distribution
+                        </h2>
+                    </div>
+                    <div class="win-dist-content" id="winDistContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Driver Age Analysis -->
+                <div class="card analytics-card" id="ageAnalysisCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">👤</span>
+                            Grid Age Analysis
+                        </h2>
+                    </div>
+                    <div class="age-analysis-content" id="ageAnalysisContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Season Records -->
+                <div class="card analytics-card" id="recordsCard">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="title-icon">📜</span>
+                            Season Records
+                        </h2>
+                    </div>
+                    <div class="records-content" id="recordsContent">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== STRATEGY LAB SECTION ========== -->
+        <section class="section" id="section-strategy">
+            <div class="section-header-bar">
+                <h2 class="section-main-title">🧪 Strategy Lab</h2>
+                <span class="ai-badge">Interactive Simulator</span>
+            </div>
+            <div class="strategy-lab-grid">
+                <div class="card" id="strategySimCard">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">⚙️</span> Pit Stop Strategy Optimizer</h2>
+                        <span class="card-badge live-badge">INTERACTIVE</span>
+                    </div>
+                    <div id="strategySimContent"><!-- Filled by JS --></div>
+                </div>
+                <div class="card" id="underCutCard">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🔄</span> Undercut Analysis</h2>
+                        <span class="card-badge">LIVE</span>
+                    </div>
+                    <div id="underCutContent"><!-- Filled by JS --></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== BET INTELLIGENCE SECTION ========== -->
+        <section class="section" id="section-bet">
+            <div class="section-header-bar">
+                <h2 class="section-main-title">🎯 Bet Edge Intelligence</h2>
+                <span class="ai-badge"
+                    style="background:linear-gradient(135deg,rgba(255,140,0,0.2),rgba(220,40,0,0.2));border-color:rgba(255,140,0,0.4);color:#ff8c00;">BETTING
+                    ANALYSIS</span>
+            </div>
+
+            <!-- Row 1: Teammate Battle + Driver Form -->
+            <div class="grid-2col" style="margin-bottom:24px;">
+                <div class="card" id="teammateBattleCard">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🤼</span> Teammate Battle Tracker</h2>
+                        <span class="card-badge"
+                            style="background:rgba(255,140,0,0.15);color:#ff8c00;border-color:rgba(255,140,0,0.3);">H2H</span>
+                    </div>
+                    <div id="teammateBattleContent"><!-- Filled by JS --></div>
+                </div>
+                <div class="card" id="driverFormCard">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">📈</span> Driver Form Index</h2>
+                        <span class="card-badge live-badge">LAST 5 RACES</span>
+                    </div>
+                    <div id="driverFormContent"><!-- Filled by JS --></div>
+                </div>
+            </div>
+
+            <!-- Row 2: DNF Reliability -->
+            <div class="card" style="margin-bottom:24px;" id="dnfCard">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">💀</span> DNF & Reliability Dashboard</h2>
+                    <span class="card-badge">RISK RADAR</span>
+                </div>
+                <div id="dnfContent"><!-- Filled by JS --></div>
+            </div>
+
+            <!-- Row 3: Podium Conversion + Quali→Race -->
+            <div class="grid-2col" style="margin-bottom:24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🏆</span> Podium Conversion Rate</h2>
+                        <span class="card-badge"
+                            style="background:rgba(255,215,0,0.15);color:#ffd700;border-color:rgba(255,215,0,0.3);">CIRCUIT
+                            HISTORY</span>
+                    </div>
+                    <div id="podiumConversionContent"><!-- Filled by JS --></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">🔄</span> Quali → Race Conversion</h2>
+                        <span class="card-badge">POSITION DELTA</span>
+                    </div>
+                    <div id="qualiRaceConvContent"><!-- Filled by JS --></div>
+                </div>
+            </div>
+
+            <!-- Row 4: Circuit DNA -->
+            <div class="card" style="margin-bottom:24px;" id="circuitDnaCard">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="title-icon">🗺️</span> Circuit DNA — Next Race</h2>
+                    <span class="card-badge"
+                        style="background:rgba(0,229,255,0.15);color:var(--f1-cyan);border-color:rgba(0,229,255,0.3);">BET
+                        FACTORS</span>
+                </div>
+                <div id="circuitDnaContent"><!-- Filled by JS --></div>
+            </div>
+
+            <!-- Row 5: Championship Permutations + Circuit History -->
+            <div class="grid-2col" style="margin-bottom:24px;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">♟️</span> Title Permutations</h2>
+                        <span class="card-badge">SCENARIOS</span>
+                    </div>
+                    <div id="champPermContent"><!-- Filled by JS --></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span class="title-icon">📜</span> Circuit Recent Winners</h2>
+                        <span class="card-badge"
+                            style="background:rgba(255,215,0,0.15);color:#ffd700;border-color:rgba(255,215,0,0.3);">LAST
+                            5
+                            YEARS</span>
+                    </div>
+                    <div id="circuitHistoryContent"><!-- Filled by JS --></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========== DRIVER PROFILE MODAL ========== -->
+    <div class="modal-overlay" id="driverModal" onclick="closeDriverModal(event)">
+        <div class="modal-card" id="driverModalCard">
+            <button class="modal-close"
+                onclick="document.getElementById('driverModal').classList.remove('active')">&times;</button>
+            <div id="driverModalContent">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>F1 Command Center &copy; 2025 | Data powered by <a href="https://api.jolpi.ca" target="_blank">Jolpica F1
+                    API</a> & <a href="https://api.openf1.org" target="_blank">OpenF1</a></p>
+            <p class="footer-disclaimer">This is an independent project and is not associated in any way with the
+                Formula 1 companies.</p>
+        </div>
+    </footer>
+
+    <script src="app.js?v=9"></script>
+</body>
+
+</html>
