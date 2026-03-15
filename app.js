@@ -541,19 +541,34 @@ async function fetchAllData(year) {
             }));
         }
 
+        // v6: Prev year last race results fallback (for Pit Stop Analysis and others)
+        const prevLastRaceData = await fetchJSON(`${API_BASE}/${prevYear}/last/results.json`);
+        if (state.lastRaceResults.length === 0 && prevLastRaceData?.MRData?.RaceTable?.Races?.length > 0) {
+            const race = prevLastRaceData.MRData.RaceTable.Races[0];
+            state.lastRaceName = race.raceName;
+            state.lastRaceCircuit = race.Circuit.circuitName;
+            state.lastCircuitId = race.Circuit.circuitId;
+            state.lastRaceRound = race.round;
+            state.lastRaceCountry = race.Circuit.Location.country;
+            state.lastRaceResults = race.Results.slice(0, 10).map(r => ({
+                pos: parseInt(r.position),
+                code: r.Driver.code || r.Driver.familyName.substring(0, 3).toUpperCase(),
+                name: `${r.Driver.givenName} ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: r.Time?.time || r.status || 'N/A',
+                points: parseInt(r.points)
+            }));
+        }
+
         console.log(`[BET EDGE] Loaded ${state.raceResults.length} race results, ${state.allQualiResults.length} quali results from ${prevYear}`);
 
-        // Re-render ALL bet edge features with previous year data
-        setTimeout(() => {
-            renderTeammateBattle();
-            renderDriverForm();
-            renderDNFReliability();
-            renderQualiToRaceConversion();
-            renderChampionshipPermutations();
-            renderPodiumConversion();
-            renderCircuitHistory();
-        }, 100);
+        // Re-render EVERYTHING now that fallback state is ready
+        state.loading = false;
+        renderAll();
     }
+    
+    state.loading = false;
+    renderAll();
 }
 
 // Always load current year only — no fallback to previous seasons
@@ -753,6 +768,7 @@ function renderOverview() {
         heroValues[1].dataset.count = uniqueDrivers;
         heroValues[2].dataset.count = totalTeams;
         heroValues[3].dataset.count = sprintRaces;
+        animateCounters();
     }
 
     renderChampionshipBattle();
@@ -1642,8 +1658,8 @@ function renderNextRacePrediction() {
     const sumProb = top8.reduce((s, d) => s + d.winProb, 0);
     if (sumProb !== 100) top8[0].winProb += (100 - sumProb);
 
-    const flag = FLAG_MAP[nextRace.country] || '🏁';
-    const raceDateStr = new Date(nextRace.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    const flag = COUNTRY_FLAGS[nextRace.country] || '🏁';
+    const raceDateStr = new Date(nextRace.date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
     const daysAway = Math.ceil((new Date(nextRace.date) - today) / (1000 * 60 * 60 * 24));
 
     let html = `
