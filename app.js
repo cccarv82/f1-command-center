@@ -192,6 +192,23 @@ async function fetchAllData(year) {
             time: r.Time?.time || r.status || 'N/A',
             points: parseInt(r.points)
         }));
+    } else if (resultsData?.MRData?.RaceTable?.Races?.length > 0) {
+        // Fallback: use the very last race in results list
+        const races = resultsData.MRData.RaceTable.Races;
+        const race = races[races.length - 1];
+        state.lastRaceName = race.raceName;
+        state.lastRaceCircuit = race.Circuit.circuitName;
+        state.lastCircuitId = race.Circuit.circuitId;
+        state.lastRaceRound = race.round;
+        state.lastRaceCountry = race.Circuit.Location.country;
+        state.lastRaceResults = race.Results.slice(0, 10).map(r => ({
+            pos: parseInt(r.position),
+            code: r.Driver.code || r.Driver.familyName.substring(0, 3).toUpperCase(),
+            name: `${r.Driver.givenName} ${r.Driver.familyName}`,
+            team: r.Constructor.name,
+            time: r.Time?.time || r.status || 'N/A',
+            points: parseInt(r.points)
+        }));
     } else {
         state.lastRaceResults = [];
         state.errors.push('No race results available yet.');
@@ -207,7 +224,8 @@ async function fetchAllData(year) {
             country: r.Circuit.Location.country,
             date: r.date,
             time: r.time || '',
-            sprint: !!(r.Sprint || r.SprintQualifying)
+            sprint: !!(r.Sprint || r.SprintQualifying),
+            hasResults: false
         }));
     } else {
         state.raceCalendar = [];
@@ -228,9 +246,11 @@ async function fetchAllData(year) {
 
     // Parse full season race results
     state.raceResults = [];
+    const completedRounds = new Set();
     if (resultsData?.MRData?.RaceTable?.Races?.length > 0) {
         resultsData.MRData.RaceTable.Races.forEach(race => {
             const round = parseInt(race.round);
+            completedRounds.add(round);
             (race.Results || []).forEach(r => {
                 state.raceResults.push({
                     round,
@@ -248,6 +268,11 @@ async function fetchAllData(year) {
             });
         });
     }
+
+    // Mark calendar races as completed if results exist
+    state.raceCalendar.forEach(r => {
+        if (completedRounds.has(r.round)) r.hasResults = true;
+    });
 
     // Parse full season qualifying results
     state.qualifyingResults = [];
@@ -489,6 +514,33 @@ async function fetchAllData(year) {
             }));
         }
 
+        // v6: Prev year constructor standings fallback
+        const prevConstructorData = await fetchJSON(`${API_BASE}/${prevYear}/constructorStandings.json`);
+        if (state.constructorStandings.length === 0 && prevConstructorData?.MRData?.StandingsTable?.StandingsLists?.length > 0) {
+            const list = prevConstructorData.MRData.StandingsTable.StandingsLists[0];
+            state.constructorStandings = list.ConstructorStandings.map(cs => ({
+                pos: parseInt(cs.position),
+                name: cs.Constructor.name,
+                nationality: cs.Constructor.nationality || '',
+                points: parseInt(cs.points),
+                wins: parseInt(cs.wins)
+            }));
+        }
+
+        // v6: Prev year sprint results fallback
+        const prevSprintData = await fetchJSON(`${API_BASE}/${prevYear}/last/sprint.json`);
+        if (state.sprintResults.length === 0 && prevSprintData?.MRData?.RaceTable?.Races?.length > 0) {
+            const race = prevSprintData.MRData.RaceTable.Races[0];
+            state.sprintResults = (race.SprintResults || []).slice(0, 10).map(r => ({
+                pos: parseInt(r.position),
+                code: r.Driver.code || r.Driver.familyName.substring(0, 3).toUpperCase(),
+                name: `${r.Driver.givenName} ${r.Driver.familyName}`,
+                team: r.Constructor.name,
+                time: r.Time?.time || r.status || 'N/A',
+                points: parseInt(r.points)
+            }));
+        }
+
         console.log(`[BET EDGE] Loaded ${state.raceResults.length} race results, ${state.allQualiResults.length} quali results from ${prevYear}`);
 
         // Re-render ALL bet edge features with previous year data
@@ -677,8 +729,22 @@ function animateCounters() {
 function renderOverview() {
     // Update hero stats
     const totalRaces = state.raceCalendar.length;
-    const uniqueDrivers = state.driverStandings.length || state.drivers.length;
-    const totalTeams = state.constructorStandings.length;
+    
+    // Drivers: Standings first, then drivers list, then results
+    const driverCodes = new Set([
+        ...state.driverStandings.map(d => d.code),
+        ...state.drivers.map(d => d.code),
+        ...state.raceResults.map(r => r.driverCode)
+    ]);
+    const uniqueDrivers = driverCodes.size;
+
+    // Teams: Standings first, then results
+    const teamNames = new Set([
+        ...state.constructorStandings.map(t => t.name),
+        ...state.raceResults.map(r => r.team)
+    ]);
+    const totalTeams = teamNames.size;
+
     const sprintRaces = state.raceCalendar.filter(r => r.sprint).length;
 
     const heroValues = document.querySelectorAll('.hero-stat-value[data-count]');
@@ -704,10 +770,10 @@ function renderChampionshipBattle() {
         return;
     }
 
-    const top3 = state.driverStandings.slice(0, 3);
+    const top10 = state.driverStandings.slice(0, 10);
     let html = '';
 
-    top3.forEach((driver, i) => {
+    top10.forEach((driver, i) => {
         const teamColor = getTeamColor(driver.team);
         html += `
             <div class="battle-driver">
@@ -726,8 +792,8 @@ function renderChampionshipBattle() {
                 </div>
             </div>
         `;
-        if (i === 0 && top3.length > 1) {
-            const gap = top3[0].points - top3[1].points;
+        if (i === 0 && top10.length > 1) {
+            const gap = top10[0].points - top10[1].points;
             html += `
                 <div class="battle-gap">
                     <div class="battle-gap-value">${gap > 0 ? '+' : ''}${gap} pts</div>
@@ -861,13 +927,17 @@ function renderConstructorBars() {
 function renderSeasonProgress() {
     const container = document.getElementById('nextRaceContent');
     const now = new Date();
-    const completedRaces = state.raceCalendar.filter(r => new Date(r.date + 'T23:59:59') < now).length;
+    
+    // A race is completed if it has results OR if its date is in the past
+    const isCompleted = r => r.hasResults || new Date(r.date + 'T23:59:59') < now;
+    
+    const completedRaces = state.raceCalendar.filter(isCompleted).length;
     const totalRaces = state.raceCalendar.length;
     const progress = totalRaces > 0 ? (completedRaces / totalRaces * 100) : 0;
 
-    // Find upcoming races
-    const upcomingRaces = state.raceCalendar.filter(r => new Date(r.date + 'T23:59:59') >= now);
-    const pastRaces = state.raceCalendar.filter(r => new Date(r.date + 'T23:59:59') < now);
+    // Find upcoming races (those without results AND in the future/today)
+    const upcomingRaces = state.raceCalendar.filter(r => !r.hasResults && new Date(r.date + 'T23:59:59') >= now);
+    const pastRaces = state.raceCalendar.filter(isCompleted);
 
     let html = `
         <div>
@@ -894,7 +964,7 @@ function renderSeasonProgress() {
                     <div class="upcoming-race-flag">${flag}</div>
                     <div class="upcoming-race-info">
                         <div class="upcoming-race-name">${race.name}</div>
-                        <div class="upcoming-race-date">${race.locality || race.circuit} • ${dateStr}${i === 0 ? ` • em ${daysUntil} dias` : ''}</div>
+                        <div class="upcoming-race-date">${race.locality || race.circuit} • ${dateStr}${i === 0 && daysUntil > 0 ? ` • in ${daysUntil} days` : i === 0 && daysUntil <= 0 ? ' • RACE WEEKEND' : ''}</div>
                     </div>
                     ${race.sprint ? '<span class="upcoming-race-badge badge-sprint">SPRINT</span>' : ''}
                     ${i === 0 ? '<span class="upcoming-race-badge" style="color:var(--f1-red);background:rgba(225,6,0,0.1);border:1px solid rgba(225,6,0,0.2);">NEXT UP</span>' : ''}
