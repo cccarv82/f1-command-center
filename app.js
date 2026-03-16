@@ -1601,7 +1601,11 @@ function renderNextRacePrediction() {
         card.style.gridColumn = '1 / -1'; // full width
         card.innerHTML = `
             <div class="card-header">
-                <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;display:inline-block;vertical-align:middle;"><path d="M19 17H5a2 2 0 0 1 0-4h14a2 2 0 0 0 0-4H5"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="17" r="2"/></svg></span> Next Race Prediction</h2>
+                <h2 class="card-title">
+                    <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;display:inline-block;vertical-align:middle;"><path d="M19 17H5a2 2 0 0 1 0-4h14a2 2 0 0 0 0-4H5"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="17" r="2"/></svg></span>
+                    Next Race Prediction
+                    <span class="info-tooltip">?<span class="tooltip-text">Algorithm based on 5 factors: Last Race Result (30%), Championship Pos (20%), Circuit History (20%), Recent Form (20%), and Quali Conversion (10%).</span></span>
+                </h2>
                 <span class="card-badge prediction-badge">FORECAST</span>
             </div>
             <div id="nextRacePredContent"></div>
