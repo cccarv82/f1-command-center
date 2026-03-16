@@ -341,6 +341,7 @@
                         <h2 class="card-title">
                             <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17H5a2 2 0 0 1 0-4h14a2 2 0 0 0 0-4H5"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="17" r="2"/></svg></span>
                             Next Race Prediction
+                            <span class="info-tooltip">?<span class="tooltip-text">Algorithm based on 5 factors: Last Race Result (30%), Championship Pos (20%), Circuit History (20%), Recent Form (20%), and Quali Conversion (10%).</span></span>
                         </h2>
                         <span class="card-badge prediction-badge">FORECAST</span>
                     </div>
@@ -396,7 +397,9 @@
             <!-- Tyre Degradation (NEW) -->
             <div class="card" style="margin-bottom:24px;" id="tyreDegCard">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg></span> Tyre Degradation Model</h2>
+                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg></span> Tyre Degradation Model
+                        <span class="info-tooltip">?<span class="tooltip-text">Calculates average lap time lost per 10 laps based on linear regression of real stint data. A higher positive number means faster tyre wear.</span></span>
+                    </h2>
                     <span class="card-badge prediction-badge">OPENF1</span>
                 </div>
                 <div id="tyreDegContent"><!-- Filled by JS --></div>
@@ -526,7 +529,9 @@
                 </div>
                 <div class="card" id="underCutCard">
                     <div class="card-header">
-                        <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span> Undercut Analysis</h2>
+                        <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span> Undercut Analysis
+                        <span class="info-tooltip">?<span class="tooltip-text">An 'undercut' is pitting before a rival to use fresh tyre pace to get ahead. This shows if a driver had the qualifying pace gap required to make it work.</span></span>
+                    </h2>
                         <span class="card-badge">LIVE</span>
                     </div>
                     <div id="underCutContent"><!-- Filled by JS --></div>
@@ -555,7 +560,9 @@
                 </div>
                 <div class="card" id="driverFormCard">
                     <div class="card-header">
-                        <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Driver Form Index</h2>
+                        <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Driver Form Index
+                        <span class="info-tooltip">?<span class="tooltip-text">Momentum score based on the last 5 races. Recent results have a higher weight multiplier. Win=25, DNF=-5.</span></span>
+                    </h2>
                         <span class="card-badge live-badge">LAST 5 RACES</span>
                     </div>
                     <div id="driverFormContent"><!-- Filled by JS --></div>
@@ -584,7 +591,9 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span> Quali → Race Conversion</h2>
+                        <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" x2="19" y1="12" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span> Race Pace vs Grid Position
+                        <span class="info-tooltip">?<span class="tooltip-text">Average positions gained (▲) or lost (▼) between Qualifying and the final Race result. Shows who are the best racers on Sundays.</span></span>
+                    </h2>
                         <span class="card-badge">POSITION DELTA</span>
                     </div>
                     <div id="qualiRaceConvContent"><!-- Filled by JS --></div>
@@ -594,7 +603,9 @@
             <!-- Row 4: Circuit DNA -->
             <div class="card" style="margin-bottom:24px;" id="circuitDnaCard">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg></span> Circuit DNA — Next Race</h2>
+                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg></span> Circuit DNA — Next Race
+                        <span class="info-tooltip">?<span class="tooltip-text">Historical characteristics of the track. PU = Power Unit (Engine). Higher SC = greater chance of Safety Car.</span></span>
+                    </h2>
                     <span class="card-badge"
                         style="background:rgba(0,229,255,0.15);color:var(--f1-cyan);border-color:rgba(0,229,255,0.3);">BET
                         FACTORS</span>
@@ -637,12 +648,49 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-inner">
-            <p>F1 Command Center &copy; 2025 | Data powered by <a href="https://api.jolpi.ca" target="_blank">Jolpica F1
+            <p>F1 Command Center &copy; 2026 | Data powered by <a href="https://api.jolpi.ca" target="_blank">Jolpica F1
                     API</a> & <a href="https://api.openf1.org" target="_blank">OpenF1</a></p>
+            <p style="margin-top:8px;">
+                <button onclick="document.getElementById('glossaryModal').classList.add('active')" style="background:none;border:1px solid rgba(255,255,255,0.3);color:var(--text-secondary);padding:4px 12px;border-radius:12px;font-size:0.7rem;cursor:pointer;transition:all 0.2s;">📖 F1 Data Glossary</button>
+            </p>
             <p class="footer-disclaimer">This is an independent project and is not associated in any way with the
                 Formula 1 companies.</p>
         </div>
     </footer>
+
+    <!-- ========== GLOSSARY MODAL ========== -->
+    <div class="modal-overlay" id="glossaryModal" onclick="if(event.target === this) this.classList.remove('active')">
+        <div class="modal-card" style="max-width: 600px;">
+            <button class="modal-close" onclick="document.getElementById('glossaryModal').classList.remove('active')">&times;</button>
+            <h2 style="margin-bottom:16px;border-bottom:1px solid var(--border-medium);padding-bottom:12px;font-family:'Orbitron',sans-serif;"><span style="color:var(--f1-red);">📖</span> F1 Data Glossary</h2>
+            <div style="font-size:0.85rem;line-height:1.6;color:var(--text-secondary);max-height:60vh;overflow-y:auto;padding-right:10px;">
+                <div style="margin-bottom: 12px;">
+                    <strong style="color:var(--text-primary);font-family:'JetBrains Mono', monospace;">Undercut</strong><br>
+                    A strategy where a trailing driver pits for fresh tires before the driver ahead. The fresh tire advantage allows them to drive faster on their out-lap, theoretically jumping the other driver when they eventually pit.
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong style="color:var(--text-primary);font-family:'JetBrains Mono', monospace;">Tyre Degradation (Deg)</strong><br>
+                    The rate at which a tire loses performance (lap time) as it wears out. Our model calculates the average seconds lost every 10 laps based on real stint telemetry.
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong style="color:var(--text-primary);font-family:'JetBrains Mono', monospace;">PU Sensitivity</strong><br>
+                    Power Unit (Engine) Sensitivity. Indicates how crucial engine power is on a specific circuit. High sensitivity (e.g., Monza) means top speed is king; low means aerodynamic downforce matters more (e.g., Monaco).
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong style="color:var(--text-primary);font-family:'JetBrains Mono', monospace;">Quali to Race Conversion</strong><br>
+                    Measures a driver's Sunday race pace relative to their one-lap qualifying pace. A positive delta means they consistently finish higher than they start.
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong style="color:var(--text-primary);font-family:'JetBrains Mono', monospace;">Driver Form Index</strong><br>
+                    A momentum score based on the last 5 races. Recent results carry more weight. Win = 25pts. Useful for predicting near-future performance independent of the overall championship.
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong style="color:var(--text-primary);font-family:'JetBrains Mono', monospace;">DRS (Drag Reduction System)</strong><br>
+                    An adjustable flap on the rear wing that reduces drag and increases top speed to aid overtaking. Only available when within 1 second of the car ahead in specific zones.
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="app.js?v=9"></script>
 </body>
