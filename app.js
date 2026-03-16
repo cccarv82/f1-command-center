@@ -2800,7 +2800,16 @@ function renderWeather() {
     const container = document.getElementById('weatherContent');
     if (!container) return;
 
-    if (!state.weatherData || state.weatherData.length === 0) {
+    // Add tooltip to its parent card header (dynamically)
+    const card = container.closest('.card');
+    if (card) {
+        const title = card.querySelector('.card-title');
+        if (title && !title.querySelector('.info-tooltip')) {
+            title.innerHTML += `<span class="info-tooltip">?<span class="tooltip-text">Real-time track conditions from OpenF1 sensors. Air/Track temperature and rainfall probability.</span></span>`;
+        }
+    }
+
+    if (!state.weather || state.weather.length === 0) {
         showEmptyState(container, 'Weather data loading from OpenF1...');
         return;
     }

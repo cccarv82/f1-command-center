@@ -502,13 +502,14 @@ body {
     backdrop-filter: blur(12px);
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .card:hover {
     border-color: var(--border-medium);
     box-shadow: var(--shadow-hover);
     background: var(--bg-card-hover);
+    z-index: 50;
 }
 
 /* Gradient top border on hover */

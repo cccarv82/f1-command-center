@@ -123,6 +123,7 @@
                         <h2 class="card-title">
                             <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
                             Championship Battle
+                            <span class="info-tooltip">?<span class="tooltip-text">Current Top 10 Driver standings. Live points include the lead gap in real-time.</span></span>
                         </h2>
                         <span class="card-badge live-badge">LIVE</span>
                     </div>
@@ -137,6 +138,7 @@
                         <h2 class="card-title">
                             <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg></span>
                             Last Race Result
+                            <span class="info-tooltip">?<span class="tooltip-text">Full Top 10 results from the most recently completed Grand Prix. Click a driver to see their profile.</span></span>
                         </h2>
                         <span class="card-badge">R24</span>
                     </div>
@@ -149,7 +151,9 @@
             <!-- Pit Stop Analysis Card (NEW) -->
             <div class="card pit-stop-card" id="pitStopCard">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> Pit Stop Analysis</h2>
+                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> Pit Stop Analysis
+                        <span class="info-tooltip">?<span class="tooltip-text">Stationary time for each driver's best pit stop in the last race. Faster stops give a massive strategic advantage.</span></span>
+                    </h2>
                     <span class="card-badge">LAST RACE</span>
                 </div>
                 <div id="pitStopContent"><!-- Filled by JS --></div>
@@ -158,7 +162,9 @@
             <!-- Sprint Race Results (NEW) -->
             <div class="card sprint-card" id="sprintCard" style="display:none;">
                 <div class="card-header">
-                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Sprint Race</h2>
+                    <h2 class="card-title"><span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Sprint Race
+                        <span class="info-tooltip">?<span class="tooltip-text">Results from the 100km Saturday Sprint session. Top 8 finishers score championship points.</span></span>
+                    </h2>
                     <span class="card-badge"
                         style="background:rgba(255,140,0,0.2);color:#ff8c00;border-color:rgba(255,140,0,0.4);">SPRINT</span>
                 </div>
@@ -171,6 +177,7 @@
                     <h2 class="card-title">
                         <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg></span>
                         Top 5 Driver Championship
+                        <span class="info-tooltip">?<span class="tooltip-text">Visual performance summary of the leading title contenders this season.</span></span>
                     </h2>
                 </div>
                 <div class="top-drivers-grid" id="topDriversGrid">
@@ -185,6 +192,7 @@
                         <h2 class="card-title">
                             <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"/><path d="M20 20V8l-4-4H8L4 8v12"/><path d="M12 20v-8"/><path d="M8 20v-4"/><path d="M16 20v-4"/></svg></span>
                             Constructor Points
+                            <span class="info-tooltip">?<span class="tooltip-text">Cumulative points scored by both drivers of each team. This determines the prize money payout.</span></span>
                         </h2>
                     </div>
                     <div class="constructor-bars" id="constructorBars">
@@ -196,6 +204,7 @@
                         <h2 class="card-title">
                             <span class="title-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>
                             Season Progress
+                            <span class="info-tooltip">?<span class="tooltip-text">Shows the percentage of the season completed and highlights the countdown to the next event.</span></span>
                         </h2>
                     </div>
                     <div class="next-race-content" id="nextRaceContent">
