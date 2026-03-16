@@ -3385,7 +3385,7 @@ select:focus-visible {
  } 
  
  . i n f o - t o o l t i p   . t o o l t i p - t e x t : : a f t e r   { 
-         c o n t e n t :   \  
+ 
  \ ; 
          p o s i t i o n :   a b s o l u t e ; 
          t o p :   1 0 0 % ; 
@@ -3397,13 +3397,79 @@ select:focus-visible {
  } 
  
  . i n f o - t o o l t i p : h o v e r   . t o o l t i p - t e x t   { 
-         v i s i b i l i t y :   v i s i b l e ; 
-         o p a c i t y :   1 ; 
- } 
- 
- / *   H e l p   h i g h l i g h t   f o r   l a b e l s   * / 
- . h e l p - l a b e l   { 
-         b o r d e r - b o t t o m :   1 p x   d o t t e d   r g b a ( 2 5 5 , 2 5 5 , 2 5 5 , 0 . 3 ) ; 
-         c u r s o r :   h e l p ; 
- }  
- 
+/* ==========================================
+   TOOLTIPS & INFO ICONS (UX Improvements)
+   ========================================== */
+.info-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    cursor: help;
+    margin-left: 8px;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-tooltip:hover {
+    background: var(--f1-red);
+    color: white;
+    border-color: var(--f1-red);
+}
+
+.info-tooltip .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    width: max-content;
+    max-width: 220px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    text-align: left;
+    border-radius: 8px;
+    padding: 10px 14px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    border: 1px solid var(--border-medium);
+    font-size: 0.72rem;
+    font-weight: 400;
+    line-height: 1.5;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    font-family: 'Outfit', sans-serif;
+    white-space: normal;
+}
+
+.info-tooltip .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: var(--border-medium) transparent transparent transparent;
+}
+
+.info-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    bottom: 125%;
+}
+
+/* Help highlight for labels */
+.help-label {
+    border-bottom: 1px dotted rgba(255,255,255,0.3);
+    cursor: help;
+}
